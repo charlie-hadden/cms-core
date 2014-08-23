@@ -19,6 +19,7 @@ class PageConfiguration implements ConfigurationInterface
             ->children()
                 ->scalarNode('extends')->end()
                 ->arrayNode('fields')
+                    ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->children()
                             ->scalarNode('name')->isRequired()->end()

@@ -61,6 +61,25 @@ class PageLoader implements PageLoaderInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getFields($path)
+    {
+        // Load the config for this page
+        $config = $this->getConfigArray($path);
+        $fields = $config['fields'];
+
+        // Recurse if the page extends anything to get parent fields
+        if (isset($config['extends'])) {
+            $parentFields = $this->getFields($config['extends']);
+
+            $fields = array_merge($parentFields, $fields);
+        }
+
+        return $fields;
+    }
+
+    /**
      * Return the config tree.
      *
      * @return NodeInterface

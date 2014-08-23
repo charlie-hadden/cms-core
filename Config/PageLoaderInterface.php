@@ -18,4 +18,13 @@ interface PageLoaderInterface
      * @return array
      */
     public function getConfigArray($path);
+
+    /**
+     * Gets an array of field configs for the page, with parents taken into
+     * account.
+     *
+     * @param  string $path
+     * @return array
+     */
+    public function getFields($path);
 }
