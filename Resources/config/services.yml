@@ -1,0 +1,8 @@
+parameters:
+    cms_core.page_loader.class: CMS\CoreBundle\Config\PageLoader
+
+services:
+    cms_core.page_loader:
+        class: %cms_core.page_loader.class%
+        calls:
+            - [ setRootDir, [ %kernel.root_dir%/pages ] ]
