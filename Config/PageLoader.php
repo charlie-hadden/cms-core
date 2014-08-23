@@ -57,7 +57,7 @@ class PageLoader implements PageLoaderInterface
         $configTree = $this->getConfigTree();
         $config = $configTree->normalize($config);
 
-        return $config;
+        return $configTree->finalize($config);
     }
 
     /**
