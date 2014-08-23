@@ -1,7 +1,7 @@
 {
     "name": "charlie-hadden/cms-core",
     "description": "The core bundle which provides pretty much everything apart from admin stuff.",
-    "license": "DBAD",
+    "license": "WTFPL",
     "type": "symfony-bundle",
     "require": {
         "php": ">=5.4.0"
