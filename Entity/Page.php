@@ -24,6 +24,15 @@ class Page
     protected $id;
 
     /**
+     * The route path used for automatic routing.
+     *
+     * @ORM\Column(type="string")
+     *
+     * @var string
+     */
+    protected $routePath;
+
+    /**
      * All the fields related to this page.
      *
      * @ORM\OneToMany(targetEntity="Field", mappedBy="page", orphanRemoval=true)
@@ -34,10 +43,14 @@ class Page
 
     /**
      * Constructor.
+     *
+     * @param string $routePath
      */
-    public function __construct()
+    public function __construct($routePath)
     {
         $this->fields = new ArrayCollection();
+
+        $this->setRoutePath($routePath);
     }
 
     /**
@@ -48,6 +61,29 @@ class Page
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Returns the route path of the page.
+     *
+     * @return string
+     */
+    public function getRoutePath()
+    {
+        return $this->routePath;
+    }
+
+    /**
+     * Sets the route path of the page.
+     *
+     * @param  string $routePath
+     * @return Page
+     */
+    public function setRoutePath($routePath)
+    {
+        $this->routePath = $routePath;
+
+        return $this;
     }
 
     /**
