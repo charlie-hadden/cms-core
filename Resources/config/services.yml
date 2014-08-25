@@ -1,5 +1,6 @@
 parameters:
     cms_core.page_loader.class: CMS\CoreBundle\Config\PageLoader
+    cms_core.page_converter.class: CMS\CoreBundle\ParamConverter\PageConverter
 
     cms_core.page_config_dir: %kernel.root_dir%/pages
 
@@ -8,3 +9,15 @@ services:
         class: %cms_core.page_loader.class%
         calls:
             - [ setRootDir, [ %cms_core.page_config_dir% ] ]
+
+    cms_core.page_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method: getRepository
+        arguments: [ CMS\CoreBundle\Entity\Page ]
+
+    cms_core.page_converter:
+        class: %cms_core.page_converter.class%
+        arguments: [ @cms_core.page_repository ]
+        tags:
+            - { name: request.param_converter, priority: 10, converter: cms_page_converter }
