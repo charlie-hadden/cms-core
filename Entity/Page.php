@@ -7,10 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
+use ArrayAccess;
+use BadMethodCallException;
+
 /**
  * @ORM\Entity
  */
-class Page
+class Page implements ArrayAccess
 {
     /**
      * The id of the page.
@@ -108,5 +111,65 @@ class Page
         ;
 
         return $this->fields->matching($criteria);
+    }
+
+    /**
+     * Checks if a published field with the given name exists for this page.
+     *
+     * @param string $name
+     */
+    public function offsetExists($name)
+    {
+        foreach ($this->getPublishedFields() as $field) {
+            if ($field->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the value of the published field with this name, or null if no
+     * such field exists.
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function offsetGet($name)
+    {
+        foreach ($this->getPublishedFields() as $field) {
+            if ($field->getName() === $name) {
+                return $field->getValue();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Don't allow setting by offset.
+     *
+     * {@inheritDoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new BadMethodCallException(sprintf(
+            'Setting by offset is not allowed for %s.',
+            get_class($this)
+        ));
+    }
+
+    /**
+     * Don't allow unsetting by offset.
+     *
+     * {@inheritDoc}
+     */
+    public function offsetUnset($offset)
+    {
+        throw new BadMethodCallException(sprintf(
+            'Unsetting by offset is not allowed for %s.',
+            get_class($this)
+        ));
     }
 }
