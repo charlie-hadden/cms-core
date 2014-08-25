@@ -2,10 +2,6 @@
 
 namespace CMS\CoreBundle\Config;
 
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Definition\NodeInterface;
-
 class PageLoader implements PageLoaderInterface
 {
     /**
