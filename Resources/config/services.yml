@@ -1,6 +1,7 @@
 parameters:
     cms_core.page_loader.class: CMS\CoreBundle\Config\PageLoader
     cms_core.page_converter.class: CMS\CoreBundle\ParamConverter\PageConverter
+    cms_core.route_loader.class: CMS\CoreBundle\Routing\RouteLoader
 
     cms_core.page_config_dir: %kernel.root_dir%/pages
 
@@ -21,3 +22,9 @@ services:
         arguments: [ @cms_core.page_repository ]
         tags:
             - { name: request.param_converter, priority: 10, converter: cms_page_converter }
+
+    cms_core.route_loader:
+        class: %cms_core.route_loader.class%
+        arguments: [ @cms_core.page_loader ]
+        tags:
+            - { name: routing.loader }

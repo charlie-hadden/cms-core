@@ -43,8 +43,8 @@ class UpdatePagesCommand extends ContainerAwareCommand
     /**
      * Updates the page in the database.
      *
-     * @param  string $routePath
-     * @param  array  $fields
+     * @param string $routePath
+     * @param array  $fields
      */
     protected function update($routePath, array $fields)
     {
