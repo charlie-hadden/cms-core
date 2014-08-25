@@ -31,33 +31,13 @@ class UpdatePagesCommand extends ContainerAwareCommand
         $pageLoader = $container->get('cms_core.page_loader');
 
         // Iterate over the files and update the database
-        foreach ($pageLoader->findFiles() as $file) {
-            // Strip out the file extension as we don't care about that
-            $extLen = strlen($file->getExtension()) + 1;
-            $path = substr($file->getRelativePathname(), 0, -$extLen);
+        foreach ($pageLoader->findConfigs() as $file) {
+            $routePath = $file->getRoutePath();
 
-            // Get the path to automatically route and the fields for the page
-            $routePath = $this->getRoutePath($path);
-            $fields = $pageLoader->getFields($path);
+            $output->writeLn(sprintf('%s => %s', $file->getPath(), $routePath));
 
-            $output->writeLn(sprintf('%s => %s', $path, $routePath));
-
-            $this->update($routePath, $fields);
+            $this->update($routePath, $file->getFields());
         }
-    }
-
-    /**
-     * Return the route path for the given path.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function getRoutePath($path)
-    {
-        $path = str_replace('\\', '/', $path);
-        $path = str_replace('_', '-', $path);
-
-        return $path;
     }
 
     /**
