@@ -161,6 +161,8 @@ class Field
 
         $this->published = true;
 
+        $this->page->flushPublishedFields();
+
         return $this;
     }
 
@@ -172,6 +174,8 @@ class Field
     public function unpublish()
     {
         $this->published = false;
+
+        $this->page->flushPublishedFields();
 
         return $this;
     }

@@ -45,6 +45,13 @@ class Page implements ArrayAccess
     protected $fields;
 
     /**
+     * The published fields related to this page.
+     *
+     * @var Collection|null
+     */
+    protected $publishedFields;
+
+    /**
      * Constructor.
      *
      * @param string $routePath
@@ -106,11 +113,23 @@ class Page implements ArrayAccess
      */
     public function getPublishedFields()
     {
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('published', true))
-        ;
+        if (!$this->publishedFields) {
+            $criteria = Criteria::create()
+                ->where(Criteria::expr()->eq('published', true))
+            ;
 
-        return $this->fields->matching($criteria);
+            $this->publishedFields = $this->fields->matching($criteria);
+        }
+
+        return $this->publishedFields;
+    }
+
+    /**
+     * Flushes the cached published fields so they are reloaded on next access.
+     */
+    public function flushPublishedFields()
+    {
+        $this->publishedFields = null;
     }
 
     /**
