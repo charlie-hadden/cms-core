@@ -30,6 +30,13 @@ class PageLoader implements PageLoaderInterface
     protected $configTree;
 
     /**
+     * Cache of loaded config arrays.
+     *
+     * @var array
+     */
+    protected $loadedConfig = [];
+
+    /**
      * {@inheritDoc}
      */
     public function setRootDir($rootDir)
@@ -42,24 +49,11 @@ class PageLoader implements PageLoaderInterface
      */
     public function getConfigArray($path)
     {
-        // Find the file
-        $file = $this->locator->locate($path . '.yml');
-
-        // Make sure we have a YAML parser
-        if (!$this->yaml) {
-            $this->yaml = new Parser();
+        if (!isset($this->loadedConfig[$path])) {
+            $this->loadConfig($path);
         }
 
-        // Load the configuration
-        $config = $this->yaml->parse(file_get_contents($file));
-
-        // Normalize the configuration
-        $configTree = $this->getConfigTree();
-        $config = $configTree->normalize($config);
-
-        var_dump('load');
-
-        return $configTree->finalize($config);
+        return $this->loadedConfig[$path];
     }
 
     /**
@@ -105,5 +99,30 @@ class PageLoader implements PageLoaderInterface
         }
 
         return $this->configTree;
+    }
+
+    /**
+     * Load the config for the path.
+     *
+     * @param  string $path
+     */
+    protected function loadConfig($path)
+    {
+        // Find the file
+        $file = $this->locator->locate($path . '.yml');
+
+        // Make sure we have a YAML parser
+        if (!$this->yaml) {
+            $this->yaml = new Parser();
+        }
+
+        // Load the configuration
+        $config = $this->yaml->parse(file_get_contents($file));
+
+        // Normalize the configuration
+        $configTree = $this->getConfigTree();
+        $config = $configTree->normalize($config);
+
+        $this->loadedConfig[$path] = $configTree->finalize($config);
     }
 }
