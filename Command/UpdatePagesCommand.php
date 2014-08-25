@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Symfony\Component\Finder\Finder;
-
 use CMS\CoreBundle\Entity\Page;
 use CMS\CoreBundle\Entity\Field;
 
@@ -32,15 +30,8 @@ class UpdatePagesCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $pageLoader = $container->get('cms_core.page_loader');
 
-        // We want to find all config files that don't start with an underscore
-        $finder = (new Finder())
-            ->files()
-            ->in($container->getParameter('cms_core.page_config_dir'))
-            ->notName('_*')
-        ;
-
         // Iterate over the files and update the database
-        foreach ($finder as $file) {
+        foreach ($pageLoader->findFiles() as $file) {
             // Strip out the file extension as we don't care about that
             $extLen = strlen($file->getExtension()) + 1;
             $path = substr($file->getRelativePathname(), 0, -$extLen);

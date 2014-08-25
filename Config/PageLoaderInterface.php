@@ -12,6 +12,14 @@ interface PageLoaderInterface
     public function setRootDir($rootDir);
 
     /**
+     * Return an iterator of the config files in the given sub-directory.
+     *
+     * @param  string $subDir
+     * @return \Symfony\Component\Finder\Finder
+     */
+    public function findFiles($subDir = '');
+
+    /**
      * Gets the configuration array for the page found at the given path.
      *
      * @param  string $path

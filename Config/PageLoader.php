@@ -5,9 +5,17 @@ namespace CMS\CoreBundle\Config;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\NodeInterface;
+use Symfony\Component\Finder\Finder;
 
 class PageLoader implements PageLoaderInterface
 {
+    /**
+     * The root directory for page configuration.
+     *
+     * @var string
+     */
+    protected $rootDir;
+
     /**
      * The FileLocator to use for loading page config files.
      *
@@ -41,7 +49,21 @@ class PageLoader implements PageLoaderInterface
      */
     public function setRootDir($rootDir)
     {
+        $this->rootDir = $rootDir;
+
         $this->locator = new FileLocator($rootDir);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findFiles($subDir = '')
+    {
+        return (new Finder())
+            ->files()
+            ->in($this->rootDir . '/' . $subDir)
+            ->notName('_*')
+        ;
     }
 
     /**
