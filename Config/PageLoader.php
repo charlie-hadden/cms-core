@@ -57,7 +57,19 @@ class PageLoader implements PageLoaderInterface
         $configTree = $this->getConfigTree();
         $config = $configTree->normalize($config);
 
+        var_dump('load');
+
         return $configTree->finalize($config);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getView($path)
+    {
+        $config = $this->getConfigArray($path);
+
+        return isset($config['view']) ? $config['view'] : null;
     }
 
     /**

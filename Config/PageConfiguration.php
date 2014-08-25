@@ -18,6 +18,7 @@ class PageConfiguration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('extends')->end()
+                ->scalarNode('view')->end()
                 ->arrayNode('fields')
                     ->isRequired()
                     ->useAttributeAsKey('name')

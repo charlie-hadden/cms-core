@@ -20,6 +20,14 @@ interface PageLoaderInterface
     public function getConfigArray($path);
 
     /**
+     * Gets the view to use for automatic rendering of the page.
+     *
+     * @param  string $path
+     * @return string|null
+     */
+    public function getView($path);
+
+    /**
      * Gets an array of field configs for the page, with parents taken into
      * account.
      *
